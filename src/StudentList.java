@@ -1,4 +1,6 @@
-public class StudentList {
+import java.io.*;
+
+public class StudentList implements Serializable{
     Student[] list;
     int size, maxSize;
 
@@ -24,7 +26,6 @@ public class StudentList {
             for (int i = size - 1; i >= index; i++) {
                 list[i - 1] = list[i];
             }
-            list[index] = student;
             size--;
         }
     }
@@ -47,19 +48,19 @@ public class StudentList {
         }
     }
 
-    public Student searchByStdId(long stdId){
+    public boolean searchByStdId(long stdId){
         for(int i=0;i<size;i++){
             if(list[i].getStdId()==stdId){
-                return list[i];
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
 
     public void sortByStdId(){
         for(int i=0;i<size-1;i++){
-            long min=list[j].getStdId();
+            long min=list[i].getStdId();
             int index=i;
             for(int j=1;j<size;j++){
                 if(list[j].getStdId()<list[i].getStdId()){
@@ -72,5 +73,77 @@ public class StudentList {
 
         }
     }
+    public Student retrieve(long stdId){
+        for(int i=0;i<size;i++){
+            if(list[i].getStdId()==stdId){
+                return list[i];
+            }
+        }
+        return null;
+    }
+    public Student retrieveAt(int index){
+        if(index>=0 && index<size)
+            return list[index];
+        else
+            return null;
+    }
 
+    public void print(long stdId){
+        for(int i=0;i<size;i++){
+            if(list[i].getStdId()==stdId){
+                list[i].printStudent();
+                break;
+            }
+        }
+    }
+
+    public boolean isEmpty(){
+        if(size>0)
+            return true;
+        else
+            return false;
+    }
+    public int size(){
+        return size;
+    }
+
+    public void expandArray(int increaseBy){
+        maxSize+=increaseBy;
+    }
+    public StudentList(){
+        maxSize=50;
+        list=new Student[maxSize];
+        size=0;
+    }
+    public StudentList(int size){
+        maxSize=size;
+        list=new Student[maxSize];
+        size=0;
+    }
+    public StudentList(StudentList studentList) {
+
+    }
+    public StudentList(String fileName) {
+        maxSize=50;
+        list=new Student[maxSize];
+        size=0;
+
+               try
+               {
+                   ObjectInputStream objectInputStream=new ObjectInputStream(new FileInputStream(fileName));
+
+                   while(true){
+                       Student record=(Student) objectInputStream.readObject();
+                       addStudentEnd(record);
+                   }
+               } catch (ClassNotFoundException e) {
+                   e.printStackTrace();
+               }
+               catch (EOFException e){
+                   e.printStackTrace();
+               }
+               catch (IOException e) {
+            e.printStackTrace();
+               }
+    }
 }

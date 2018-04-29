@@ -18,11 +18,11 @@ public class InvalidGpaException extends Exception{
         super(cause);
         this.gpa=gpa;
     }
-
+/*
     protected InvalidGpaException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, float gpa) {
         super(message, cause, enableSuppression, writableStackTrace);
         this.gpa=gpa;
-    }
+    }*/
 
     @Override
     public String getMessage() {
