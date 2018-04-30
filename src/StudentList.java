@@ -4,21 +4,29 @@ public class StudentList implements Serializable{
     Student[] list;
     int size, maxSize;
 
-    public void addStudentEnd(Student student) {
-        if (size < maxSize) {
-            list[size] = student;
-            size++;
+    public boolean addStudentEnd(Student student) {
+        if (size < maxSize && !searchByStdId(student.getStdId()))
+            {
+                list[size] = student;
+                size++;
+                return true;
+            }
+            else
+                return false;
         }
-    }
 
-    public void addStudentAt(Student student, int index) {
-        if (size < maxSize && index >= 0 && index < size) {
+
+    public boolean addStudentAt(Student student, int index ) {
+        if (size < maxSize && index >= 0 && index <= size &&!searchByStdId(student.getStdId()) ) {
             for (int i = size; i > index; i++) {
                 list[i] = list[i - 1];
             }
             list[index] = student;
             size++;
+            return true;
         }
+        else
+            return false;
     }
 
     public void deleteStudentAt( int index) {
@@ -39,10 +47,11 @@ public class StudentList implements Serializable{
             }
     }
 
-    public void updateRecord(long stdId,Student newDetails){
+    public void updateRecord(long stdId,Student newDetails) throws InvalidGpaException {
         for(int i=0;i<size;i++){
             if(list[i].getStdId()==stdId){
-                deleteStudentAt(i);
+                Student s=new Student(newDetails.getStdId(),newDetails.getFirstName(),newDetails.getLastName(),newDetails.getGender(),newDetails.getBirthDate(),newDetails.getMajor(),newDetails.getGpa());
+                list[i]=s;
                 break;
             }
         }
@@ -145,5 +154,18 @@ public class StudentList implements Serializable{
                catch (IOException e) {
             e.printStackTrace();
                }
+    }
+    public boolean SaveToFile(String fileName) {
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(fileName));
+
+                for (int i = 0; i < size; i++)
+                    objectOutputStream.writeObject(list[i]);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }
