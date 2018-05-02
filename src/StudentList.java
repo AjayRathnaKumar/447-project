@@ -1,5 +1,4 @@
 import java.io.*;
-
 public class StudentList implements Serializable{
     Student[] list;
     int size, maxSize;
@@ -18,7 +17,7 @@ public class StudentList implements Serializable{
 
     public boolean addStudentAt(Student student, int index ) {
         if (size < maxSize && index >= 0 && index <= size &&!searchByStdId(student.getStdId()) ) {
-            for (int i = size; i > index; i++) {
+            for (int i = size; i > index; i--) {
                 list[i] = list[i - 1];
             }
             list[index] = student;
@@ -31,8 +30,8 @@ public class StudentList implements Serializable{
 
     public void deleteStudentAt( int index) {
         if (size < maxSize) {
-            for (int i = size - 1; i >= index; i++) {
-                list[i - 1] = list[i];
+            for (int i = index; i <=size-1; i++) {
+                list[i+1] = list[i];
             }
             size--;
         }
@@ -65,14 +64,12 @@ public class StudentList implements Serializable{
         }
         return false;
     }
-
-
     public void sortByStdId(){
         for(int i=0;i<size-1;i++){
             long min=list[i].getStdId();
             int index=i;
-            for(int j=1;j<size;j++){
-                if(list[j].getStdId()<list[i].getStdId()){
+            for(int j=i+1;j<size;j++){
+                if(list[j].getStdId()<list[index].getStdId()){
                     index=j;
                 }
             }
